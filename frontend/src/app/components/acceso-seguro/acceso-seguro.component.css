@@ -1,0 +1,33 @@
+.glass-card {
+  background: rgba(29, 32, 34, 0.4);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pin-dot {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pin-dot.active {
+  background-color: #4edea3;
+  box-shadow: 0 0 12px rgba(78, 222, 163, 0.5);
+  transform: scale(1.1);
+}
+
+.numpad-btn:active {
+  transform: scale(0.95);
+  background-color: rgba(180, 197, 255, 0.1);
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+@keyframes progress {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-progress {
+  animation: progress 1.5s ease-in-out infinite;
+}

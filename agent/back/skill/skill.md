@@ -35,4 +35,4 @@ Resolver la parte de backend, datos y contratos del proyecto sin acoplarla a la 
 
 ## Entregables esperados
 
-- Haz en el readme.md que se encuentra en la ruta `..readme.md` las especificaciones de la api y todo lo necesario para que `agente-front` pueda consumirla.
+- Haz en el readme.md que se encuentra en el `README.md` las especificaciones de la api y todo lo necesario para que `agente-front` pueda consumirla.

@@ -1,0 +1,282 @@
+<div class="bg-background text-on-surface min-h-screen overflow-x-hidden p-6 font-body-md select-none">
+  <div class="bento-container max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+    <!-- Sidebar Navigation (Left Col) -->
+    <aside class="sidebar glass-card rounded-2xl flex flex-col p-6 lg:col-span-1 justify-between h-fit lg:h-[calc(100vh-48px)]">
+      <div>
+        <div class="flex items-center gap-4 mb-12">
+          <div class="w-12 h-12 rounded-full overflow-hidden border border-white/20 shrink-0">
+            <img alt="Alan" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1fp9Qg-suf1PfSMle4Mo2xziKhawQw_sCQNfO-yi7cMlh_0N0QD9FupK6LwIdsuqTpf0EALT245ZtS79i9qxD42Tz9ImS1TjEO5PBZPktarbXZXQExbWs2Tr4DIK1X9LzsbvhqY1shmDVOWrjMB_MEQKGYTtW-x16_IoOQIqD6lXEsOVBujKLp1JvVrk7EYmjxvgeKqsLGiEAz0uDmudunArFOGu2OzKrT4ykhInq4zLO0PoWpFseQBSqazLDgoK4Z4JoQ18oZ9Br"/>
+          </div>
+          <div class="sidebar-text">
+            <h2 class="text-headline-md font-semibold">{{ currentUser()?.nombre }}</h2>
+            <div class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+              <span class="text-[10px] font-label-mono uppercase text-tertiary">Sesión Segura</span>
+            </div>
+          </div>
+        </div>
+
+        <nav class="space-y-2">
+          <a class="flex items-center gap-4 p-4 rounded-xl bg-secondary-container text-on-secondary-container transition-all" href="javascript:void(0)">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+            <span class="sidebar-text font-semibold">Dashboard</span>
+          </a>
+          <a class="flex items-center gap-4 p-4 rounded-xl text-on-surface-variant hover:bg-surface-variant/20 transition-all" href="javascript:void(0)">
+            <span class="material-symbols-outlined">swap_horiz</span>
+            <span class="sidebar-text font-semibold">Transferencias</span>
+          </a>
+          <a class="flex items-center gap-4 p-4 rounded-xl text-on-surface-variant hover:bg-surface-variant/20 transition-all" href="javascript:void(0)">
+            <span class="material-symbols-outlined">shield_lock</span>
+            <span class="sidebar-text font-semibold">Seguridad</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="pt-6 border-t border-white/10 mt-6 lg:mt-0">
+        <button class="w-full flex items-center gap-4 p-4 rounded-xl text-error hover:bg-error/10 transition-all" (click)="logout()">
+          <span class="material-symbols-outlined">logout</span>
+          <span class="sidebar-text font-semibold">Cerrar Sesión</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Dashboard Area (Center Cols) -->
+    <main class="flex flex-col gap-6 lg:col-span-2 overflow-y-auto max-h-[calc(100vh-48px)] pr-2 custom-scrollbar">
+      
+      <!-- Balance & Account Selector -->
+      <section class="glass-card rounded-2xl p-8 relative overflow-hidden shrink-0">
+        <div class="absolute -right-24 -top-24 w-64 h-64 bg-secondary-container/10 blur-[80px] rounded-full"></div>
+        <div class="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6">
+          <div>
+            <p class="text-body-md text-on-surface-variant mb-2 uppercase tracking-widest font-label-mono">Saldo Consolidado</p>
+            <div class="flex items-baseline gap-3">
+              <span class="text-display-currency text-on-surface tracking-tight">
+                {{ selectedAccount()?.saldo | number:'1.2-2' }}
+              </span>
+              <span class="text-headline-lg text-secondary">€</span>
+            </div>
+            <div class="mt-4 flex items-center gap-2 text-tertiary">
+              <span class="material-symbols-outlined text-[20px]">trending_up</span>
+              <span class="text-body-md font-semibold">+2.1% este mes</span>
+            </div>
+          </div>
+
+          <!-- Account Tabs Selector -->
+          <div class="bg-surface-container-low rounded-xl p-1.5 border border-white/5 flex flex-wrap gap-1">
+            @for (acc of accounts(); track acc.id) {
+              <button class="px-4 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all"
+                      [class.bg-secondary-container]="selectedAccount()?.id === acc.id"
+                      [class.text-on-secondary-container]="selectedAccount()?.id === acc.id"
+                      [class.text-on-surface-variant]="selectedAccount()?.id !== acc.id"
+                      [class.hover:text-on-surface]="selectedAccount()?.id !== acc.id"
+                      (click)="selectAccount(acc)">
+                {{ acc.numeroCuenta.slice(0, 4) }}...{{ acc.numeroCuenta.slice(-4) }}
+              </button>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- Operation Panel -->
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-6 shrink-0">
+        <!-- Quick Actions -->
+        <div class="md:col-span-2 flex flex-col gap-4">
+          <button class="flex-1 min-h-[96px] flex items-center gap-4 px-6 bg-secondary-container text-on-secondary-container rounded-2xl shadow-lg active:scale-[0.98] transition-all group"
+                  (click)="executeWithdrawal()">
+            <div class="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">payments</span>
+            </div>
+            <div class="text-left">
+              <span class="block font-bold text-headline-md leading-tight">Retirar Efectivo</span>
+              <span class="text-xs opacity-70">Confirmar retiro</span>
+            </div>
+          </button>
+          <button class="flex-1 min-h-[96px] flex items-center gap-4 px-6 bg-surface-container-high border border-white/10 text-on-surface rounded-2xl hover:bg-surface-variant/20 active:scale-[0.98] transition-all group"
+                  (click)="executeDeposit()">
+            <div class="w-14 h-14 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined text-[32px]">input</span>
+            </div>
+            <div class="text-left">
+              <span class="block font-bold text-headline-md leading-tight">Depositar Fondos</span>
+              <span class="text-xs text-on-surface-variant">Confirmar depósito</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Amount Input Card -->
+        <section class="md:col-span-3 glass-card rounded-2xl p-6 flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-label-mono text-on-surface-variant uppercase tracking-widest text-xs">Monto de Operación</h3>
+            <button class="p-2 hover:bg-white/5 rounded-lg transition-colors text-error" (click)="clearAmount()" title="Limpiar monto">
+              <span class="material-symbols-outlined">backspace</span>
+            </button>
+          </div>
+          <div class="staggered-input-block flex items-center justify-center py-5 rounded-2xl mb-6">
+            <span class="text-3xl font-light text-on-surface tracking-wide">
+              {{ operationAmount() | number:'1.2-2' }} <span class="text-secondary opacity-50">€</span>
+            </span>
+          </div>
+          <div class="grid grid-cols-3 gap-3">
+            <button class="py-3 rounded-xl bg-surface-container-high border border-white/10 text-on-surface font-bold hover:bg-secondary-container hover:text-white transition-all" (click)="addAmount(20)">+20€</button>
+            <button class="py-3 rounded-xl bg-surface-container-high border border-white/10 text-on-surface font-bold hover:bg-secondary-container hover:text-white transition-all" (click)="addAmount(50)">+50€</button>
+            <button class="py-3 rounded-xl bg-surface-container-high border border-white/10 text-on-surface font-bold hover:bg-secondary-container hover:text-white transition-all" (click)="addAmount(100)">+100€</button>
+          </div>
+        </section>
+      </div>
+
+      <!-- Recent Activity Table -->
+      <section class="glass-card rounded-2xl flex-grow flex flex-col overflow-hidden min-h-[300px]">
+        <div class="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
+          <h2 class="text-headline-md font-semibold text-on-surface">Actividad Reciente</h2>
+          <span class="text-xs text-on-surface-variant font-label-mono">Cuenta activa</span>
+        </div>
+        <div class="overflow-y-auto flex-1 custom-scrollbar">
+          @if (transactions().length === 0) {
+            <div class="flex flex-col items-center justify-center p-12 text-on-surface-variant/40">
+              <span class="material-symbols-outlined text-5xl mb-3">receipt_long</span>
+              <p class="text-sm">No hay transacciones registradas en esta cuenta.</p>
+            </div>
+          } @else {
+            <table class="w-full text-left border-collapse">
+              <thead class="sticky top-0 bg-surface-container-high z-10">
+                <tr class="text-on-surface-variant text-[10px] font-label-mono uppercase tracking-widest">
+                  <th class="px-6 py-4 font-medium">Concepto & Fecha</th>
+                  <th class="px-6 py-4 font-medium">Categoría IA</th>
+                  <th class="px-6 py-4 font-medium">Estado</th>
+                  <th class="px-6 py-4 font-medium text-right">Monto</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5">
+                @for (tx of transactions(); track tx.id) {
+                  <tr class="group hover:bg-white/5 transition-colors" [class.bg-error/5]="tx.tipo === 'RETIRO' && (tx.cantidad || tx.monto || 0) <= -300">
+                    <td class="px-6 py-4">
+                      <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                             [class.bg-[#E50914]/20]="tx.categoria === 'Entretenimiento'"
+                             [class.text-[#E50914]]="tx.categoria === 'Entretenimiento'"
+                             [class.bg-orange-500/20]="tx.categoria === 'Alimentación'"
+                             [class.text-orange-500]="tx.categoria === 'Alimentación'"
+                             [class.bg-secondary-container/20]="tx.categoria === 'Efectivo'"
+                             [class.text-secondary]="tx.categoria === 'Efectivo'"
+                             [class.bg-tertiary/20]="tx.categoria === 'Nómina'"
+                             [class.text-tertiary]="tx.categoria === 'Nómina'"
+                             [class.bg-surface-variant/40]="tx.categoria !== 'Entretenimiento' && tx.categoria !== 'Alimentación' && tx.categoria !== 'Efectivo' && tx.categoria !== 'Nómina'">
+                          <span class="material-symbols-outlined text-[20px]">
+                            @if (tx.categoria === 'Entretenimiento') { movie }
+                            @else if (tx.categoria === 'Alimentación') { shopping_basket }
+                            @else if (tx.categoria === 'Efectivo') { atm }
+                            @else if (tx.categoria === 'Nómina') { account_balance_wallet }
+                            @else { receipt }
+                          </span>
+                        </div>
+                        <div>
+                          <div class="font-bold text-on-surface text-sm">{{ tx.concepto }}</div>
+                          <div class="text-[11px] text-on-surface-variant">{{ tx.fecha | date:'medium' }}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4">
+                      <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
+                            [class.bg-purple-500/10]="tx.categoria === 'Entretenimiento'"
+                            [class.text-purple-400]="tx.categoria === 'Entretenimiento'"
+                            [class.bg-orange-500/10]="tx.categoria === 'Alimentación'"
+                            [class.text-orange-400]="tx.categoria === 'Alimentación'"
+                            [class.bg-blue-500/10]="tx.categoria === 'Efectivo'"
+                            [class.text-blue-400]="tx.categoria === 'Efectivo'"
+                            [class.bg-emerald-500/10]="tx.categoria === 'Nómina'"
+                            [class.text-emerald-400]="tx.categoria === 'Nómina'"
+                            [class.bg-white/10]="tx.categoria !== 'Entretenimiento' && tx.categoria !== 'Alimentación' && tx.categoria !== 'Efectivo' && tx.categoria !== 'Nómina'">
+                        {{ tx.categoria }}
+                      </span>
+                    </td>
+                    <td class="px-6 py-4">
+                      @if (tx.tipo === 'RETIRO' && (tx.cantidad || tx.monto || 0) <= -300) {
+                        <div class="flex items-center gap-1.5 text-error">
+                          <span class="material-symbols-outlined text-[16px]">gpp_maybe</span>
+                          <span class="text-[11px] font-bold">Sospechosa</span>
+                        </div>
+                      } @else {
+                        <div class="flex items-center gap-1.5 text-tertiary">
+                          <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                          <span class="text-[11px] font-semibold">Segura</span>
+                        </div>
+                      }
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                      <span class="font-bold text-sm" [class.text-error]="(tx.cantidad || tx.monto || 0) < 0" [class.text-tertiary]="(tx.cantidad || tx.monto || 0) >= 0">
+                        {{ tx.cantidad || tx.monto | number:'1.2-2' }} €
+                      </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+        </div>
+      </section>
+    </main>
+
+    <!-- AI Side Panel (Right Col) -->
+    <aside class="ai-sidebar glass-card rounded-2xl flex flex-col p-6 lg:col-span-1 relative overflow-hidden h-[500px] lg:h-[calc(100vh-48px)]">
+      <div class="absolute inset-0 bg-tertiary/5 pointer-events-none"></div>
+      <div class="relative z-10 h-full flex flex-col justify-between">
+        
+        <div>
+          <!-- Header -->
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-tertiary/20 text-tertiary shrink-0">
+              <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">neurology</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-on-surface text-sm">Asistente Virtual</h3>
+              <p class="text-[9px] text-tertiary uppercase tracking-wider font-label-mono">Motor Cognitivo Activo</p>
+            </div>
+          </div>
+
+          <!-- Chat logs -->
+          <div class="space-y-4 max-h-[300px] lg:max-h-[420px] overflow-y-auto custom-scrollbar pr-1">
+            @for (msg of chatHistory(); track $index) {
+              <div class="p-4 rounded-xl text-xs leading-relaxed border"
+                   [class.bg-surface-container-low]="msg.sender === 'ai'"
+                   [class.border-white/5]="msg.sender === 'ai'"
+                   [class.bg-tertiary/10]="msg.sender === 'user'"
+                   [class.border-tertiary/20]="msg.sender === 'user'"
+                   [class.self-end]="msg.sender === 'user'"
+                   [class.ml-6]="msg.sender === 'user'">
+                {{ msg.text }}
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Input and actions -->
+        <div class="mt-6">
+          <div class="relative">
+            <input class="bg-surface-container-highest border-none focus:ring-1 focus:ring-tertiary/50 rounded-xl text-xs w-full py-4.5 pl-4 pr-12 placeholder:text-on-surface-variant/50 text-white outline-none" 
+                   placeholder="Pregunta algo..." 
+                   type="text" 
+                   [(ngModel)]="assistantQuery"
+                   (keyup.enter)="sendAiMessage()"/>
+            <button class="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-tertiary hover:bg-tertiary/10 rounded-lg transition-all"
+                    (click)="sendAiMessage()">
+              <span class="material-symbols-outlined">send</span>
+            </button>
+          </div>
+          <div class="flex flex-wrap gap-2 mt-3 justify-center">
+            <button class="px-3 py-2 rounded-lg bg-surface-container-low text-[9px] font-bold text-on-surface-variant hover:text-tertiary border border-white/5 transition-all"
+                    (click)="assistantQuery.set('Bloquear Tarjeta'); sendAiMessage()">
+              Bloquear Tarjeta
+            </button>
+            <button class="px-3 py-2 rounded-lg bg-surface-container-low text-[9px] font-bold text-on-surface-variant hover:text-tertiary border border-white/5 transition-all"
+                    (click)="assistantQuery.set('Reportar Fraude'); sendAiMessage()">
+              Reportar Fraude
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+</div>

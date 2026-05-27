@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Smart ATM Dashboard - Premium Banking</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&amp;family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --font-geist: 'Inter', sans-serif;
+        }
+        body {
+            font-family: var(--font-geist);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .staggered-input-block {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .bento-container {
+            display: grid;
+            grid-template-columns: 280px 1fr 320px;
+            gap: 24px;
+            height: calc(100vh - 48px);
+        }
+        @media (max-width: 1280px) {
+            .bento-container {
+                grid-template-columns: 80px 1fr 300px;
+            }
+            .sidebar-text { display: none; }
+        }
+        @media (max-width: 1024px) {
+            .bento-container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            .sidebar { display: none; }
+            .ai-sidebar { display: none; }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "surface": "#101415",
+                "tertiary-fixed-dim": "#4edea3",
+                "surface-bright": "#363a3b",
+                "on-tertiary": "#003824",
+                "on-primary": "#243145",
+                "on-surface": "#e0e3e5",
+                "on-primary-container": "#75829a",
+                "secondary": "#b4c5ff",
+                "primary-container": "#0b192c",
+                "outline-variant": "#44474c",
+                "surface-container-low": "#191c1e",
+                "surface-dim": "#101415",
+                "on-background": "#e0e3e5",
+                "surface-variant": "#323537",
+                "on-error-container": "#ffdad6",
+                "error": "#ffb4ab",
+                "primary": "#bac7e1",
+                "surface-container-highest": "#323537",
+                "on-error": "#690005",
+                "inverse-primary": "#525f75",
+                "tertiary-container": "#001e11",
+                "tertiary-fixed": "#6ffbbe",
+                "tertiary": "#4edea3",
+                "on-primary-fixed-variant": "#3a475c",
+                "primary-fixed": "#d6e3fe",
+                "surface-container": "#1d2022",
+                "primary-fixed-dim": "#bac7e1",
+                "on-primary-fixed": "#0e1c2f",
+                "on-surface-variant": "#c5c6cd",
+                "on-secondary": "#002a78",
+                "error-container": "#93000a",
+                "surface-container-high": "#272a2c",
+                "on-tertiary-fixed-variant": "#005236",
+                "inverse-surface": "#e0e3e5",
+                "surface-tint": "#bac7e1",
+                "background": "#101415",
+                "on-secondary-container": "#cdd7ff",
+                "on-tertiary-container": "#009466",
+                "secondary-fixed-dim": "#b4c5ff",
+                "on-secondary-fixed-variant": "#003ea8",
+                "outline": "#8f9097",
+                "surface-container-lowest": "#0b0f10",
+                "secondary-container": "#0053db",
+                "inverse-on-surface": "#2d3133",
+                "secondary-fixed": "#dbe1ff",
+                "on-tertiary-fixed": "#002113",
+                "on-secondary-fixed": "#00174b"
+              },
+              "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+              },
+              "spacing": {
+                "base": "8px",
+                "bento-gap": "16px",
+                "margin-desktop": "48px",
+                "margin-mobile": "16px",
+                "gutter": "24px"
+              },
+              "fontFamily": {
+                "headline-lg": ["Inter"],
+                "display-currency-mobile": ["Inter"],
+                "label-mono": ["JetBrains Mono"],
+                "body-md": ["Inter"],
+                "display-currency": ["Inter"],
+                "body-lg": ["Inter"],
+                "headline-md": ["Inter"]
+              },
+              "fontSize": {
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                "display-currency-mobile": ["36px", {"lineHeight": "44px", "fontWeight": "700"}],
+                "label-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "display-currency": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface min-h-screen overflow-hidden p-6">
+<div class="bento-container max-w-[1600px] mx-auto">
+<!-- Sidebar Navigation -->
+<aside class="sidebar glass-card rounded-2xl flex flex-col p-6">
+<div class="flex items-center gap-4 mb-12">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-white/20">
+<img alt="Alan" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1fp9Qg-suf1PfSMle4Mo2xziKhawQw_sCQNfO-yi7cMlh_0N0QD9FupK6LwIdsuqTpf0EALT245ZtS79i9qxD42Tz9ImS1TjEO5PBZPktarbXZXQExbWs2Tr4DIK1X9LzsbvhqY1shmDVOWrjMB_MEQKGYTtW-x16_IoOQIqD6lXEsOVBujKLp1JvVrk7EYmjxvgeKqsLGiEAz0uDmudunArFOGu2OzKrT4ykhInq4zLO0PoWpFseQBSqazLDgoK4Z4JoQ18oZ9Br"/>
+</div>
+<div class="sidebar-text">
+<h2 class="text-headline-md font-semibold">Alan</h2>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="text-[10px] font-label-mono uppercase text-tertiary">Seguro</span>
+</div>
+</div>
+</div>
+<nav class="space-y-2 flex-1">
+<a class="flex items-center gap-4 p-4 rounded-xl bg-secondary-container text-on-secondary-container transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="sidebar-text font-semibold">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 p-4 rounded-xl text-on-surface-variant hover:bg-surface-variant/20 transition-all" href="#">
+<span class="material-symbols-outlined">swap_horiz</span>
+<span class="sidebar-text font-semibold">Transferencias</span>
+</a>
+<a class="flex items-center gap-4 p-4 rounded-xl text-on-surface-variant hover:bg-surface-variant/20 transition-all" href="#">
+<span class="material-symbols-outlined">shield_lock</span>
+<span class="sidebar-text font-semibold">Seguridad</span>
+</a>
+<a class="flex items-center gap-4 p-4 rounded-xl text-on-surface-variant hover:bg-surface-variant/20 transition-all" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="sidebar-text font-semibold">Análisis</span>
+</a>
+</nav>
+<div class="pt-6 border-t border-white/10">
+<a class="flex items-center gap-4 p-4 rounded-xl text-on-surface-variant hover:bg-surface-variant/20 transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="sidebar-text font-semibold">Configuración</span>
+</a>
+</div>
+</aside>
+<!-- Main Dashboard Area -->
+<main class="flex flex-col gap-6 overflow-y-auto pr-2 custom-scrollbar">
+<!-- Balance & Selector -->
+<section class="glass-card rounded-2xl p-8 relative overflow-hidden shrink-0">
+<div class="absolute -right-24 -top-24 w-64 h-64 bg-secondary-container/10 blur-[80px] rounded-full"></div>
+<div class="relative z-10 flex justify-between items-end">
+<div>
+<p class="text-body-md text-on-surface-variant mb-2 uppercase tracking-widest font-label-mono">Saldo Consolidado</p>
+<div class="flex items-baseline gap-3">
+<span class="text-display-currency text-on-surface tracking-tight">4.250,50</span>
+<span class="text-headline-lg text-secondary">€</span>
+</div>
+<div class="mt-4 flex items-center gap-2 text-tertiary">
+<span class="material-symbols-outlined text-[20px]" data-icon="trending_up">trending_up</span>
+<span class="text-body-md font-semibold">+2.1% este mes</span>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-1.5 border border-white/5 flex">
+<button class="px-6 py-2.5 rounded-lg text-body-md font-semibold bg-secondary-container text-on-secondary-container shadow-sm transition-all">Cuenta Corriente</button>
+<button class="px-6 py-2.5 rounded-lg text-body-md font-semibold text-on-surface-variant hover:text-on-surface transition-all">Ahorros</button>
+</div>
+</div>
+</section>
+<!-- Operation Panel -->
+<div class="grid grid-cols-5 gap-6 shrink-0">
+<!-- Quick Actions -->
+<div class="col-span-2 flex flex-col gap-4">
+<button class="flex-1 flex items-center gap-4 px-6 bg-secondary-container text-on-secondary-container rounded-2xl shadow-lg active:scale-[0.98] transition-all group">
+<div class="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">payments</span>
+</div>
+<div class="text-left">
+<span class="block font-bold text-headline-md">Retirar Efectivo</span>
+<span class="text-sm opacity-70">Acceso rápido a cajeros</span>
+</div>
+</button>
+<button class="flex-1 flex items-center gap-4 px-6 bg-surface-container-high border border-white/10 text-on-surface rounded-2xl hover:bg-surface-variant/20 active:scale-[0.98] transition-all group">
+<div class="w-14 h-14 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[32px]">input</span>
+</div>
+<div class="text-left">
+<span class="block font-bold text-headline-md">Depositar Fondos</span>
+<span class="text-sm text-on-surface-variant">Ingreso en ventanilla o ATM</span>
+</div>
+</button>
+</div>
+<!-- Amount Input Card -->
+<section class="col-span-3 glass-card rounded-2xl p-6 flex flex-col justify-between">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-label-mono text-on-surface-variant uppercase tracking-widest">Monto de Operación</h3>
+<button class="p-2 hover:bg-white/5 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-outline">edit</span>
+</button>
+</div>
+<div class="staggered-input-block flex items-center justify-center py-6 rounded-2xl mb-6">
+<span class="text-display-currency text-on-surface tracking-[0.2em] font-light">0.00 <span class="text-secondary opacity-50">€</span></span>
+</div>
+<div class="grid grid-cols-3 gap-4">
+<button class="py-4 rounded-xl bg-surface-container-high border border-white/10 text-on-surface font-bold hover:bg-secondary-container hover:text-white transition-all">+20€</button>
+<button class="py-4 rounded-xl bg-surface-container-high border border-white/10 text-on-surface font-bold hover:bg-secondary-container hover:text-white transition-all">+50€</button>
+<button class="py-4 rounded-xl bg-surface-container-high border border-white/10 text-on-surface font-bold hover:bg-secondary-container hover:text-white transition-all">+100€</button>
+</div>
+</section>
+</div>
+<!-- Recent Activity Desktop Table -->
+<section class="glass-card rounded-2xl flex-1 flex flex-col min-h-0 overflow-hidden">
+<div class="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
+<h2 class="text-headline-md font-semibold text-on-surface">Actividad Reciente</h2>
+<button class="text-secondary font-semibold hover:underline">Exportar Historial</button>
+</div>
+<div class="overflow-y-auto flex-1">
+<table class="w-full text-left border-collapse">
+<thead class="sticky top-0 bg-surface-container-high z-10">
+<tr class="text-on-surface-variant text-[11px] font-label-mono uppercase tracking-widest">
+<th class="px-6 py-4 font-medium">Concepto &amp; Fecha</th>
+<th class="px-6 py-4 font-medium">Categoría IA</th>
+<th class="px-6 py-4 font-medium">Estado</th>
+<th class="px-6 py-4 font-medium text-right">Monto</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<!-- Row 1: Netflix -->
+<tr class="group hover:bg-white/5 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-[#E50914]/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[#E50914] text-[20px]">movie</span>
+</div>
+<div>
+<div class="font-bold text-on-surface">Netflix Subscription</div>
+<div class="text-[12px] text-on-surface-variant">Hoy, 09:41 AM</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-400 text-[10px] font-bold uppercase tracking-wider">Entretenimiento</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-tertiary">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span class="text-[12px] font-semibold">Segura</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="font-bold text-error">-15,99 €</span>
+</td>
+</tr>
+<!-- Row 2: Mercadona -->
+<tr class="group hover:bg-white/5 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-orange-500 text-[20px]">shopping_basket</span>
+</div>
+<div>
+<div class="font-bold text-on-surface">Mercadona Supermercados</div>
+<div class="text-[12px] text-on-surface-variant">Ayer, 18:22 PM</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full bg-orange-500/10 text-orange-400 text-[10px] font-bold uppercase tracking-wider">Alimentación</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-tertiary">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span class="text-[12px] font-semibold">Segura</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="font-bold text-error">-64,20 €</span>
+</td>
+</tr>
+<!-- Row 3: Withdrawal -->
+<tr class="group hover:bg-white/5 transition-colors bg-error/5">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-secondary-container/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary text-[20px]">atm</span>
+</div>
+<div>
+<div class="font-bold text-on-surface">Retiro Efectivo ATM #402</div>
+<div class="text-[12px] text-on-surface-variant">05 Mar, 12:05 PM</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full bg-surface-variant text-on-surface-variant text-[10px] font-bold uppercase tracking-wider">Cajero</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-error">
+<span class="material-symbols-outlined text-[16px]">gpp_maybe</span>
+<span class="text-[12px] font-bold">Sospechosa</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="font-bold text-on-surface">-300,00 €</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+<!-- AI Side Panel -->
+<aside class="ai-sidebar glass-card rounded-2xl flex flex-col p-6 relative overflow-hidden">
+<div class="absolute inset-0 bg-tertiary/5 pointer-events-none"></div>
+<div class="relative z-10 h-full flex flex-col">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-tertiary/20 text-tertiary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">neurology</span>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">Asistente Virtual</h3>
+<p class="text-[10px] text-tertiary uppercase tracking-tighter">Motor Cognitivo Activo</p>
+</div>
+</div>
+<div class="flex-1 space-y-4 overflow-y-auto custom-scrollbar pr-1">
+<div class="bg-surface-container-low p-4 rounded-xl text-body-md border border-white/5">
+                    Hola Alan, he analizado tus gastos de esta semana. Tu gasto en <span class="text-orange-400 font-bold">alimentación</span> ha subido un 12%. ¿Quieres que ajuste tu presupuesto?
+                </div>
+<div class="bg-tertiary/10 p-4 rounded-xl text-body-md border border-tertiary/20 self-end ml-4">
+                    Parece que el retiro de 300€ no coincide con tu patrón habitual. ¿Confirmas esta operación?
+                </div>
+</div>
+<div class="mt-6">
+<div class="relative">
+<input class="bg-surface-container-highest border-none focus:ring-1 focus:ring-tertiary/50 rounded-xl text-body-md w-full py-4 pl-4 pr-12 placeholder:text-on-surface-variant/50" placeholder="Pregunta algo..." type="text"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-tertiary hover:bg-tertiary/10 rounded-lg transition-all">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+<div class="flex gap-2 mt-3">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low text-[10px] font-bold text-on-surface-variant hover:text-tertiary border border-white/5 transition-all">Bloquear Tarjeta</button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low text-[10px] font-bold text-on-surface-variant hover:text-tertiary border border-white/5 transition-all">Reportar Fraude</button>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<script>
+    // Simple haptic-like interaction simulation
+    document.querySelectorAll('button, a').forEach(el => {
+        el.addEventListener('click', () => {
+            if (window.navigator.vibrate) {
+                window.navigator.vibrate(5);
+            }
+        });
+    });
+
+    // Custom scrollbar styling
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+    `;
+    document.head.appendChild(style);
+</script>
+</body></html>

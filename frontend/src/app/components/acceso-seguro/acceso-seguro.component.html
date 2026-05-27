@@ -1,0 +1,117 @@
+<div class="min-h-screen flex flex-col font-body-md bg-background text-on-surface select-none relative overflow-x-hidden">
+  <!-- Header -->
+  <header class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-20 bg-primary-container/40 backdrop-blur-md border-b border-white/5 z-10">
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-tertiary-fixed-dim text-3xl">account_balance</span>
+      <span class="text-headline-md font-headline-md font-semibold text-on-surface">SmartBank</span>
+    </div>
+    <div class="flex items-center gap-3 px-6 py-2.5 bg-surface-container/80 rounded-full border border-white/10 shadow-lg">
+      <span class="material-symbols-outlined text-tertiary text-xl" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+      <div class="flex flex-col hidden sm:flex">
+        <span class="text-label-mono font-label-mono text-on-surface uppercase tracking-[0.2em] text-[10px]">Cifrado de Grado Bancario</span>
+        <span class="text-[9px] text-tertiary uppercase font-label-mono opacity-80">Conexión Segura Activa</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow flex items-center justify-center p-6 md:p-12 relative">
+    <!-- Ambient background glows -->
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-secondary-container/10 blur-[120px] rounded-full -z-10"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-tertiary/5 blur-[120px] rounded-full -z-10"></div>
+
+    <!-- Login Module Container -->
+    <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 glass-card rounded-[40px] shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)] overflow-hidden animate-in fade-in zoom-in-95 duration-700">
+      
+      <!-- Left Side: Identity & Welcome -->
+      <div class="p-8 md:p-16 flex flex-col items-center justify-center border-b lg:border-b-0 lg:border-r border-white/10 bg-white/2">
+        <div class="relative group mb-8">
+          <div class="absolute -inset-2 bg-gradient-to-tr from-secondary-container to-tertiary-fixed-dim rounded-full blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+          <img alt="Alan profile" class="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white/10 object-cover shadow-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBquWLmHn4NzctCMQ5trAgEdYJ90VZX5Df-vY6U0Ejd9H56Gt0MMi8SAEFzifJcnsAjJBnz8yIng7_Asb1XIrKqCRzSJMqgbP-WSwSIWmVT-XlI2wJPJU0T6LvWi6NA9TbPC6K-NlOy8AFnpRxsN9vflKcJpZhzAPHKgJ53pQUhgDTPO21LA7CNKB7WbFx5qwlBk4uzaypflli3b2bik0nxDKuvPqoXIRAXsbwJECRuGQpP0O2GuiLU--UT1sT160RFAO5Qt79JkX3u"/>
+        </div>
+        <div class="text-center">
+          <h1 class="text-headline-lg md:text-3xl font-headline-lg text-on-surface mb-3">Bienvenido de nuevo, Alan</h1>
+          <p class="text-body-md text-on-surface-variant max-w-sm mx-auto">Tu acceso biométrico y PIN de seguridad protegen tu cuenta institucional.</p>
+        </div>
+
+        <!-- PIN Display Area -->
+        <div class="flex gap-4 mt-8" id="pin-display">
+          <div class="w-16 h-20 glass-card rounded-2xl flex items-center justify-center border-white/10">
+            <div class="pin-dot w-3.5 h-3.5 rounded-full" [class.active]="pin().length > 0" [class.bg-on-surface-variant/20]="pin().length <= 0"></div>
+          </div>
+          <div class="w-16 h-20 glass-card rounded-2xl flex items-center justify-center border-white/10">
+            <div class="pin-dot w-3.5 h-3.5 rounded-full" [class.active]="pin().length > 1" [class.bg-on-surface-variant/20]="pin().length <= 1"></div>
+          </div>
+          <div class="w-16 h-20 glass-card rounded-2xl flex items-center justify-center border-white/10">
+            <div class="pin-dot w-3.5 h-3.5 rounded-full" [class.active]="pin().length > 2" [class.bg-on-surface-variant/20]="pin().length <= 2"></div>
+          </div>
+          <div class="w-16 h-20 glass-card rounded-2xl flex items-center justify-center border-white/10">
+            <div class="pin-dot w-3.5 h-3.5 rounded-full" [class.active]="pin().length > 3" [class.bg-on-surface-variant/20]="pin().length <= 3"></div>
+          </div>
+        </div>
+
+        @if (errorMessage()) {
+          <div class="mt-4 text-error text-sm font-semibold tracking-wide animate-pulse">
+            {{ errorMessage() }}
+          </div>
+        }
+      </div>
+
+      <!-- Right Side: Keypad & Auth -->
+      <div class="p-8 md:p-16 flex flex-col justify-center items-center bg-black/10">
+        <div class="w-full max-w-[340px]">
+          <div class="grid grid-cols-3 gap-4">
+            <!-- Numbers -->
+            <button class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-all" (click)="pressKey('1')">1</button>
+            <button class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-all" (click)="pressKey('2')">2</button>
+            <button class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-all" (click)="pressKey('3')">3</button>
+            
+            <button class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-all" (click)="pressKey('4')">4</button>
+            <button class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-all" (click)="pressKey('5')">5</button>
+            <button class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-all" (click)="pressKey('6')">6</button>
+            
+            <button class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-all" (click)="pressKey('7')">7</button>
+            <button class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-all" (click)="pressKey('8')">8</button>
+            <button class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-all" (click)="pressKey('9')">9</button>
+            
+            <button aria-label="Borrar" class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-error hover:bg-error/10 transition-all" (click)="deleteKey()">
+              <span class="material-symbols-outlined text-2xl">backspace</span>
+            </button>
+            <button class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-all" (click)="pressKey('0')">0</button>
+            <button aria-label="Login biométrico" class="numpad-btn h-20 rounded-2xl flex items-center justify-center bg-secondary-container text-white shadow-xl hover:brightness-110 transition-all" (click)="biometricLogin()">
+              <span class="material-symbols-outlined text-3xl">face</span>
+            </button>
+          </div>
+
+          <div class="mt-10 flex flex-col items-center gap-6">
+            <button class="text-label-mono font-label-mono text-tertiary-fixed-dim hover:text-tertiary transition-colors tracking-widest text-xs">¿OLVIDASTE TU PIN?</button>
+            <div class="w-full h-px bg-white/5"></div>
+            <p class="text-[10px] text-on-surface-variant/40 font-label-mono text-center leading-relaxed">
+              ESTA TERMINAL ESTÁ MONITOREADA<br/>
+              CIFRADO RSA-4096 & SEGURIDAD POST-CUÁNTICA
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Success Modal Overlay -->
+  <div class="fixed inset-0 z-50 bg-background/95 backdrop-blur-3xl flex flex-col items-center justify-center transition-all duration-500" 
+       [class.opacity-0]="!showSuccessOverlay()" 
+       [class.pointer-events-none]="!showSuccessOverlay()"
+       [class.opacity-100]="showSuccessOverlay()">
+    <div class="flex flex-col items-center gap-8 text-center px-6">
+      <div class="w-32 h-32 rounded-full bg-secondary-container/20 border border-secondary-container flex items-center justify-center animate-pulse">
+        <span class="material-symbols-outlined text-secondary text-6xl">verified</span>
+      </div>
+      <div>
+        <h2 class="text-4xl font-headline-lg text-white mb-2">Acceso Concedido</h2>
+        <p class="text-body-lg text-on-surface-variant">Iniciando entorno de banca privada segura...</p>
+      </div>
+      <div class="w-64 h-1 bg-white/10 rounded-full overflow-hidden">
+        <div class="h-full bg-tertiary w-1/2 animate-[progress_1.5s_ease-in-out_infinite]" style="animation-name: progress; animation-duration: 1.5s; animation-iteration-count: infinite;"></div>
+      </div>
+    </div>
+  </div>
+</div>
