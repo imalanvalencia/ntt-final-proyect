@@ -1,3 +1,19 @@
+
+#Role 
+
+
+## Backend 
+    -Carles Mora Javaloyes
+    -Adrián Pastor Alavés
+
+
+## FrontEnd 
+    - Alan Smith Valencia Izquierdo
+    - Alejandro Izquierdo Baeza
+
+
+
+
 # 🏦 Banco Online - API REST Backend (Spring Boot)
 
 Esta es la documentación del contrato y especificación de la API REST del backend de nuestra simulación de banco online. La aplicación se ejecuta por defecto en `http://localhost:8080` y utiliza una base de datos en memoria **H2** (consola accesible en `/h2-console` con usuario `sa` y sin contraseña).
