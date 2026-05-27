@@ -1,0 +1,496 @@
+<!doctype html>
+
+<html class="dark" lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-container": "#0053db",
+              "primary-container": "#0b192c",
+              "surface-container-highest": "#323537",
+              "surface-dim": "#101415",
+              "on-primary-container": "#75829a",
+              background: "#0B192C",
+              "surface-container": "#1d2022",
+              "on-secondary-fixed": "#00174b",
+              "primary-fixed-dim": "#bac7e1",
+              "primary-fixed": "#d6e3fe",
+              "on-error-container": "#ffdad6",
+              "surface-tint": "#bac7e1",
+              "on-secondary": "#002a78",
+              "tertiary-fixed": "#6ffbbe",
+              "on-tertiary-fixed-variant": "#005236",
+              "surface-container-low": "#191c1e",
+              surface: "#101415",
+              "inverse-on-surface": "#2d3133",
+              primary: "#bac7e1",
+              secondary: "#b4c5ff",
+              "surface-variant": "#323537",
+              "on-primary": "#243145",
+              "secondary-fixed": "#dbe1ff",
+              "tertiary-container": "#001e11",
+              "on-tertiary-fixed": "#002113",
+              "error-container": "#93000a",
+              "inverse-surface": "#e0e3e5",
+              error: "#ffb4ab",
+              "surface-container-lowest": "#0b0f10",
+              "inverse-primary": "#525f75",
+              "on-secondary-container": "#cdd7ff",
+              "surface-bright": "#363a3b",
+              "secondary-fixed-dim": "#b4c5ff",
+              "on-error": "#690005",
+              "on-secondary-fixed-variant": "#003ea8",
+              "on-primary-fixed-variant": "#3a475c",
+              "on-tertiary-container": "#009466",
+              "on-tertiary": "#003824",
+              "on-surface": "#e0e3e5",
+              "on-primary-fixed": "#0e1c2f",
+              "tertiary-fixed-dim": "#4edea3",
+              outline: "#8f9097",
+              "on-surface-variant": "#c5c6cd",
+              "on-background": "#e0e3e5",
+              tertiary: "#4edea3",
+              "outline-variant": "#44474c",
+              "surface-container-high": "#272a2c",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              base: "8px",
+              gutter: "24px",
+              "margin-mobile": "16px",
+              "bento-gap": "16px",
+              "margin-desktop": "48px",
+            },
+            fontFamily: {
+              "body-lg": ["Geist"],
+              "body-md": ["Geist"],
+              "display-currency": ["Geist"],
+              "display-currency-mobile": ["Geist"],
+              "headline-md": ["Geist"],
+              "label-mono": ["JetBrains Mono"],
+              "headline-lg": ["Geist"],
+            },
+            fontSize: {
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "display-currency": [
+                "48px",
+                {
+                  lineHeight: "56px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "display-currency-mobile": [
+                "36px",
+                { lineHeight: "44px", fontWeight: "700" },
+              ],
+              "headline-md": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "600" },
+              ],
+              "label-mono": [
+                "14px",
+                {
+                  lineHeight: "20px",
+                  letterSpacing: "0.05em",
+                  fontWeight: "500",
+                },
+              ],
+              "headline-lg": [
+                "32px",
+                { lineHeight: "40px", fontWeight: "600" },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #0b192c;
+        color: #e0e3e5;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        font-family: "Geist", sans-serif;
+      }
+      .glass-card {
+        background: rgba(29, 32, 34, 0.4);
+        backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .pin-dot {
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .pin-dot.active {
+        background-color: #4edea3;
+        box-shadow: 0 0 12px rgba(78, 222, 163, 0.5);
+        transform: scale(1.1);
+      }
+      .numpad-btn:active {
+        transform: scale(0.95);
+        background-color: rgba(180, 197, 255, 0.1);
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      /* Custom scrollbar for desktop */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0b192c;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #1d2022;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col font-body-md">
+    <!-- Header -->
+    <header
+      class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-20 bg-primary-container/40 backdrop-blur-md border-b border-white/5 z-10"
+    >
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-tertiary-fixed-dim text-3xl"
+          >account_balance</span
+        >
+        <span
+          class="text-headline-md font-headline-md font-semibold text-on-surface"
+          >SmartBank</span
+        >
+      </div>
+      <div
+        class="hidden md:flex items-center gap-3 px-6 py-2.5 bg-surface-container/80 rounded-full border border-white/10 shadow-lg"
+      >
+        <span
+          class="material-symbols-outlined text-tertiary text-xl"
+          data-weight="fill"
+          style="font-variation-settings: &quot;FILL&quot; 1"
+          >verified_user</span
+        >
+        <div class="flex flex-col">
+          <span
+            class="text-label-mono font-label-mono text-on-surface uppercase tracking-[0.2em] text-[10px]"
+            >Cifrado de Grado Bancario</span
+          >
+          <span
+            class="text-[9px] text-tertiary uppercase font-label-mono opacity-80"
+            >Conexión Segura Activa</span
+          >
+        </div>
+      </div>
+    </header>
+    <main
+      class="flex-grow flex items-center justify-center p-6 md:p-12 relative"
+    >
+      <!-- Ambient background glows -->
+      <div
+        class="absolute top-1/4 left-1/4 w-96 h-96 bg-secondary-container/10 blur-[120px] rounded-full -z-10"
+      ></div>
+      <div
+        class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-tertiary/5 blur-[120px] rounded-full -z-10"
+      ></div>
+      <!-- Desktop Login Module Container -->
+      <div
+        class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 glass-card rounded-[40px] shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)] overflow-hidden animate-in fade-in zoom-in-95 duration-700"
+      >
+        <!-- Left Side: Identity & Welcome -->
+        <div
+          class="p-8 md:p-16 flex flex-col items-center justify-center border-b lg:border-b-0 lg:border-r border-white/10 bg-white/2"
+        >
+          <div class="relative group mb-8">
+            <div
+              class="absolute -inset-2 bg-gradient-to-tr from-secondary-container to-tertiary-fixed-dim rounded-full blur opacity-20 group-hover:opacity-40 transition duration-1000"
+            ></div>
+            <img
+              alt="Alan profile"
+              class="relative w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-white/10 object-cover shadow-2xl"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBquWLmHn4NzctCMQ5trAgEdYJ90VZX5Df-vY6U0Ejd9H56Gt0MMi8SAEFzifJcnsAjJBnz8yIng7_Asb1XIrKqCRzSJMqgbP-WSwSIWmVT-XlI2wJPJU0T6LvWi6NA9TbPC6K-NlOy8AFnpRxsN9vflKcJpZhzAPHKgJ53pQUhgDTPO21LA7CNKB7WbFx5qwlBk4uzaypflli3b2bik0nxDKuvPqoXIRAXsbwJECRuGQpP0O2GuiLU--UT1sT160RFAO5Qt79JkX3u"
+            />
+          </div>
+          <div class="text-center">
+            <h1
+              class="text-headline-lg md:text-4xl font-headline-lg text-on-surface mb-3"
+            >
+              Bienvenido de nuevo, Alan
+            </h1>
+            <p class="text-body-lg text-on-surface-variant max-w-sm mx-auto">
+              Tu acceso biométrico y PIN de seguridad protegen tu cuenta
+              institucional.
+            </p>
+          </div>
+          <!-- PIN Display Area for Desktop -->
+          <div class="flex gap-4 mt-12" id="pin-display">
+            <div
+              class="w-16 h-20 glass-card rounded-2xl flex items-center justify-center border-white/10"
+            >
+              <div
+                class="pin-dot w-3.5 h-3.5 rounded-full bg-on-surface-variant/20"
+              ></div>
+            </div>
+            <div
+              class="w-16 h-20 glass-card rounded-2xl flex items-center justify-center border-white/10"
+            >
+              <div
+                class="pin-dot w-3.5 h-3.5 rounded-full bg-on-surface-variant/20"
+              ></div>
+            </div>
+            <div
+              class="w-16 h-20 glass-card rounded-2xl flex items-center justify-center border-white/10"
+            >
+              <div
+                class="pin-dot w-3.5 h-3.5 rounded-full bg-on-surface-variant/20"
+              ></div>
+            </div>
+            <div
+              class="w-16 h-20 glass-card rounded-2xl flex items-center justify-center border-white/10"
+            >
+              <div
+                class="pin-dot w-3.5 h-3.5 rounded-full bg-on-surface-variant/20"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <!-- Right Side: Keypad & Auth -->
+        <div
+          class="p-8 md:p-16 flex flex-col justify-center items-center bg-black/10"
+        >
+          <div class="w-full max-w-[340px]">
+            <div class="grid grid-cols-3 gap-4">
+              <!-- Numbers -->
+              <button
+                class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-colors"
+                onclick="pressKey('1')"
+              >
+                1
+              </button>
+              <button
+                class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-colors"
+                onclick="pressKey('2')"
+              >
+                2
+              </button>
+              <button
+                class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-colors"
+                onclick="pressKey('3')"
+              >
+                3
+              </button>
+              <button
+                class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-colors"
+                onclick="pressKey('4')"
+              >
+                4
+              </button>
+              <button
+                class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-colors"
+                onclick="pressKey('5')"
+              >
+                5
+              </button>
+              <button
+                class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-colors"
+                onclick="pressKey('6')"
+              >
+                6
+              </button>
+              <button
+                class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-colors"
+                onclick="pressKey('7')"
+              >
+                7
+              </button>
+              <button
+                class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-colors"
+                onclick="pressKey('8')"
+              >
+                8
+              </button>
+              <button
+                class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-colors"
+                onclick="pressKey('9')"
+              >
+                9
+              </button>
+              <button
+                aria-label="Borrar"
+                class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-error hover:bg-error/10 transition-colors"
+                onclick="deleteKey()"
+              >
+                <span class="material-symbols-outlined text-2xl"
+                  >backspace</span
+                >
+              </button>
+              <button
+                class="numpad-btn h-20 rounded-2xl flex items-center justify-center text-2xl font-semibold text-on-surface hover:bg-white/5 transition-colors"
+                onclick="pressKey('0')"
+              >
+                0
+              </button>
+              <button
+                aria-label="Login biométrico"
+                class="h-20 rounded-2xl flex items-center justify-center bg-secondary-container text-white shadow-xl hover:brightness-110 active:scale-95 transition-all"
+                onclick="biometricLogin()"
+              >
+                <span class="material-symbols-outlined text-3xl">face</span>
+              </button>
+            </div>
+            <div class="mt-10 flex flex-col items-center gap-6">
+              <button
+                class="text-label-mono font-label-mono text-tertiary-fixed-dim hover:text-tertiary transition-colors tracking-widest text-xs"
+              >
+                ¿OLVIDASTE TU PIN?
+              </button>
+              <div class="w-full h-px bg-white/5"></div>
+              <p
+                class="text-[10px] text-on-surface-variant/40 font-label-mono text-center leading-relaxed"
+              >
+                ESTA TERMINAL ESTÁ MONITOREADA<br />
+                CIFRADO RSA-4096 &amp; SEGURIDAD POST-CUÁNTICA
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Success Modal Overlay -->
+    <div
+      class="fixed inset-0 z-50 bg-background/95 backdrop-blur-3xl flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-500"
+      id="success-overlay"
+    >
+      <div class="flex flex-col items-center gap-8 text-center px-6">
+        <div
+          class="w-32 h-32 rounded-full bg-secondary-container/20 border border-secondary-container flex items-center justify-center animate-pulse"
+        >
+          <span class="material-symbols-outlined text-secondary text-6xl"
+            >verified</span
+          >
+        </div>
+        <div>
+          <h2 class="text-4xl font-headline-lg text-white mb-2">
+            Acceso Concedido
+          </h2>
+          <p class="text-body-lg text-on-surface-variant">
+            Iniciando entorno de banca privada segura...
+          </p>
+        </div>
+        <div class="w-64 h-1 bg-white/10 rounded-full overflow-hidden">
+          <div
+            class="h-full bg-tertiary w-1/2 animate-[progress_1.5s_ease-in-out_infinite]"
+            style="
+              animation-name: progress;
+              animation-duration: 1.5s;
+              animation-iteration-count: infinite;
+            "
+          ></div>
+        </div>
+      </div>
+    </div>
+    <style>
+      @keyframes progress {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+    </style>
+    <script>
+      let currentPin = "";
+      const MAX_PIN_LENGTH = 4;
+      const pinDots = document.querySelectorAll(".pin-dot");
+
+      function updateDisplay() {
+        pinDots.forEach((dot, index) => {
+          if (index < currentPin.length) {
+            dot.classList.add("active");
+            dot.classList.remove("bg-on-surface-variant/20");
+          } else {
+            dot.classList.remove("active");
+            dot.classList.add("bg-on-surface-variant/20");
+          }
+        });
+
+        if (currentPin.length === MAX_PIN_LENGTH) {
+          validatePin();
+        }
+      }
+
+      function pressKey(num) {
+        if (currentPin.length < MAX_PIN_LENGTH) {
+          currentPin += num;
+          updateDisplay();
+          if (window.navigator.vibrate) window.navigator.vibrate(15);
+        }
+      }
+
+      function deleteKey() {
+        if (currentPin.length > 0) {
+          currentPin = currentPin.slice(0, -1);
+          updateDisplay();
+        }
+      }
+
+      function validatePin() {
+        setTimeout(() => {
+          const overlay = document.getElementById("success-overlay");
+          overlay.classList.remove("opacity-0", "pointer-events-none");
+          overlay.classList.add("opacity-100");
+
+          setTimeout(() => {
+            // In a real app, redirection happens here
+            window.location.reload();
+          }, 2500);
+        }, 400);
+      }
+
+      function biometricLogin() {
+        const overlay = document.getElementById("success-overlay");
+        overlay.classList.remove("opacity-0", "pointer-events-none");
+        overlay.classList.add("opacity-100");
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      }
+
+      // Keyboard support for desktop
+      document.addEventListener("keydown", (e) => {
+        if (e.key >= "0" && e.key <= "9") {
+          pressKey(e.key);
+        } else if (e.key === "Backspace") {
+          deleteKey();
+        }
+      });
+    </script>
+  </body>
+</html>

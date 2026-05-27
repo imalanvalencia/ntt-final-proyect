@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Smart ATM Dashboard - Premium Banking</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&amp;family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --font-geist: 'Inter', sans-serif;
+        }
+        body {
+            font-family: var(--font-geist);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .staggered-input-block {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "surface": "#101415",
+                "tertiary-fixed-dim": "#4edea3",
+                "surface-bright": "#363a3b",
+                "on-tertiary": "#003824",
+                "on-primary": "#243145",
+                "on-surface": "#e0e3e5",
+                "on-primary-container": "#75829a",
+                "secondary": "#b4c5ff",
+                "primary-container": "#0b192c",
+                "outline-variant": "#44474c",
+                "surface-container-low": "#191c1e",
+                "surface-dim": "#101415",
+                "on-background": "#e0e3e5",
+                "surface-variant": "#323537",
+                "on-error-container": "#ffdad6",
+                "error": "#ffb4ab",
+                "primary": "#bac7e1",
+                "surface-container-highest": "#323537",
+                "on-error": "#690005",
+                "inverse-primary": "#525f75",
+                "tertiary-container": "#001e11",
+                "tertiary-fixed": "#6ffbbe",
+                "tertiary": "#4edea3",
+                "on-primary-fixed-variant": "#3a475c",
+                "primary-fixed": "#d6e3fe",
+                "surface-container": "#1d2022",
+                "primary-fixed-dim": "#bac7e1",
+                "on-primary-fixed": "#0e1c2f",
+                "on-surface-variant": "#c5c6cd",
+                "on-secondary": "#002a78",
+                "error-container": "#93000a",
+                "surface-container-high": "#272a2c",
+                "on-tertiary-fixed-variant": "#005236",
+                "inverse-surface": "#e0e3e5",
+                "surface-tint": "#bac7e1",
+                "background": "#101415",
+                "on-secondary-container": "#cdd7ff",
+                "on-tertiary-container": "#009466",
+                "secondary-fixed-dim": "#b4c5ff",
+                "on-secondary-fixed-variant": "#003ea8",
+                "outline": "#8f9097",
+                "surface-container-lowest": "#0b0f10",
+                "secondary-container": "#0053db",
+                "inverse-on-surface": "#2d3133",
+                "secondary-fixed": "#dbe1ff",
+                "on-tertiary-fixed": "#002113",
+                "on-secondary-fixed": "#00174b"
+              },
+              "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+              },
+              "spacing": {
+                "base": "8px",
+                "bento-gap": "16px",
+                "margin-desktop": "48px",
+                "margin-mobile": "16px",
+                "gutter": "24px"
+              },
+              "fontFamily": {
+                "headline-lg": ["Inter"],
+                "display-currency-mobile": ["Inter"],
+                "label-mono": ["JetBrains Mono"],
+                "body-md": ["Inter"],
+                "display-currency": ["Inter"],
+                "body-lg": ["Inter"],
+                "headline-md": ["Inter"]
+              },
+              "fontSize": {
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                "display-currency-mobile": ["36px", {"lineHeight": "44px", "fontWeight": "700"}],
+                "label-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "display-currency": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen pb-32 overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="bg-surface/80 backdrop-blur-xl border-b border-white/10 flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-20 sticky top-0 z-50">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-white/20">
+<img alt="Alan" class="w-full h-full object-cover" data-alt="A high-quality 3D rendered avatar of a young professional male with a clean-cut look, wearing a dark blazer. The style is minimalist and high-end, set against a soft slate blue background. The character has a friendly expression, perfectly centered and lit by soft studio lighting for a premium banking app profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1fp9Qg-suf1PfSMle4Mo2xziKhawQw_sCQNfO-yi7cMlh_0N0QD9FupK6LwIdsuqTpf0EALT245ZtS79i9qxD42Tz9ImS1TjEO5PBZPktarbXZXQExbWs2Tr4DIK1X9LzsbvhqY1shmDVOWrjMB_MEQKGYTtW-x16_IoOQIqD6lXEsOVBujKLp1JvVrk7EYmjxvgeKqsLGiEAz0uDmudunArFOGu2OzKrT4ykhInq4zLO0PoWpFseQBSqazLDgoK4Z4JoQ18oZ9Br"/>
+</div>
+<div>
+<h1 class="text-headline-md font-headline-md font-semibold text-on-surface">Hola, Alan</h1>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="text-[10px] font-label-mono uppercase tracking-wider text-tertiary">Sistema Operativo / Seguro</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="p-2 rounded-lg bg-surface-bright/10 hover:bg-surface-bright/20 transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="verified_user">verified_user</span>
+</div>
+</div>
+</header>
+<main class="px-margin-mobile md:px-margin-desktop mt-8 space-y-6 max-w-2xl mx-auto">
+<!-- Balance Section & Account Selector -->
+<section class="glass-card rounded-xl p-6 relative overflow-hidden">
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-secondary-container/10 blur-[60px] rounded-full"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-4">
+<p class="text-body-md font-body-md text-on-surface-variant">Saldo Actual</p>
+<div class="flex bg-surface-container-low rounded-lg p-1 border border-white/5">
+<button class="px-4 py-1.5 rounded-md text-[12px] font-semibold bg-secondary-container text-on-secondary-container shadow-sm transition-all">Cuenta Corriente</button>
+<button class="px-4 py-1.5 rounded-md text-[12px] font-semibold text-on-surface-variant hover:text-on-surface transition-all">Ahorros</button>
+</div>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-display-currency-mobile font-display-currency-mobile md:text-display-currency md:font-display-currency text-on-surface">4.250,50</span>
+<span class="text-headline-md font-headline-md text-secondary">€</span>
+</div>
+<div class="mt-4 flex items-center gap-2 text-tertiary">
+<span class="material-symbols-outlined text-[18px]" data-icon="trending_up">trending_up</span>
+<span class="text-body-md font-body-md font-semibold">+2.1% este mes</span>
+</div>
+</div>
+</section>
+<!-- Primary Actions -->
+<div class="grid grid-cols-2 gap-4">
+<button class="flex flex-col items-center justify-center gap-2 h-32 bg-secondary-container text-on-secondary-container rounded-xl shadow-lg active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined text-[32px]" data-icon="payments" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="font-bold text-body-md">Retirar Efectivo</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 h-32 bg-surface-container-high border border-white/10 text-on-surface rounded-xl hover:bg-surface-variant/20 active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined text-[32px]" data-icon="input">input</span>
+<span class="font-bold text-body-md">Depositar Fondos</span>
+</button>
+</div>
+<!-- Quick Amount Selector -->
+<section class="glass-card rounded-xl p-6 space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="text-label-mono font-label-mono text-on-surface-variant uppercase tracking-widest">Monto de Operación</h3>
+<span class="material-symbols-outlined text-outline" data-icon="edit">edit</span>
+</div>
+<div class="staggered-input-block flex items-center justify-center py-6 rounded-xl">
+<span class="text-display-currency-mobile font-display-currency-mobile text-on-surface tracking-widest">0.00 €</span>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<button class="py-4 rounded-lg bg-surface-container-high border border-white/10 text-on-surface font-bold hover:bg-secondary-container hover:text-white transition-colors">+20€</button>
+<button class="py-4 rounded-lg bg-surface-container-high border border-white/10 text-on-surface font-bold hover:bg-secondary-container hover:text-white transition-colors">+50€</button>
+<button class="py-4 rounded-lg bg-surface-container-high border border-white/10 text-on-surface font-bold hover:bg-secondary-container hover:text-white transition-colors">+100€</button>
+</div>
+</section>
+<!-- AI Assistant Module -->
+<section class="relative">
+<div class="absolute inset-0 bg-tertiary/10 blur-2xl rounded-full opacity-50"></div>
+<div class="glass-card rounded-xl p-4 flex items-center gap-4 border-tertiary/20">
+<div class="w-10 h-10 flex items-center justify-center rounded-full bg-tertiary/20 text-tertiary">
+<span class="material-symbols-outlined" data-icon="neurology" style="font-variation-settings: 'FILL' 1;">neurology</span>
+</div>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-full placeholder:text-on-surface-variant/50" placeholder="Asistente Virtual: ¿Qué deseas hacer hoy?" type="text"/>
+<button class="p-2 text-tertiary">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+</div>
+</section>
+<!-- Transaction History -->
+<section class="space-y-4">
+<div class="flex items-center justify-between px-2">
+<h2 class="text-headline-md font-headline-md text-on-surface">Actividad Reciente</h2>
+<button class="text-secondary text-body-md font-semibold">Ver todo</button>
+</div>
+<div class="space-y-3">
+<!-- Netflix -->
+<div class="glass-card rounded-xl p-4 flex items-center justify-between group hover:bg-white/5 transition-all">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-[#E50914]/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-[#E50914]" data-icon="movie">movie</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Netflix</h4>
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 text-[10px] font-bold uppercase">Entretenimiento</span>
+<div class="flex items-center gap-1 text-[10px] text-tertiary">
+<span class="material-symbols-outlined text-[12px]" data-icon="check_circle">check_circle</span>
+                                    Segura
+                                </div>
+</div>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-error">-15,99 €</p>
+<p class="text-[10px] text-on-surface-variant">Hoy, 09:41</p>
+</div>
+</div>
+<!-- Mercadona -->
+<div class="glass-card rounded-xl p-4 flex items-center justify-between group hover:bg-white/5 transition-all">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-orange-500" data-icon="shopping_basket">shopping_basket</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Mercadona</h4>
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-orange-500/10 text-orange-400 text-[10px] font-bold uppercase">Alimentación</span>
+<div class="flex items-center gap-1 text-[10px] text-tertiary">
+<span class="material-symbols-outlined text-[12px]" data-icon="check_circle">check_circle</span>
+                                    Segura
+                                </div>
+</div>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-error">-64,20 €</p>
+<p class="text-[10px] text-on-surface-variant">Ayer, 18:22</p>
+</div>
+</div>
+<!-- Withdrawal -->
+<div class="glass-card rounded-xl p-4 flex items-center justify-between group border-error/30 hover:bg-error/5 transition-all">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-secondary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" data-icon="atm">atm</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Retiro Efectivo</h4>
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-variant text-on-surface-variant text-[10px] font-bold uppercase">Cajero</span>
+<div class="flex items-center gap-1 text-[10px] text-error font-bold">
+<span class="material-symbols-outlined text-[12px]" data-icon="gpp_maybe">gpp_maybe</span>
+                                    Revisar Sospecha
+                                </div>
+</div>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-on-surface">-300,00 €</p>
+<p class="text-[10px] text-on-surface-variant">05 Mar, 12:05</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-surface-container-high/90 dark:bg-surface-container-high/90 backdrop-blur-2xl border-t border-white/5 fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 rounded-t-xl shadow-lg">
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl p-3 shadow-[inset_0_0_8px_rgba(180,197,255,0.3)] scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="text-label-mono font-label-mono text-[10px] mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-3 hover:bg-surface-variant/20 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="swap_horiz">swap_horiz</span>
+<span class="text-label-mono font-label-mono text-[10px] mt-1">Transfer</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-3 hover:bg-surface-variant/20 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="shield_lock">shield_lock</span>
+<span class="text-label-mono font-label-mono text-[10px] mt-1">Security</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-3 hover:bg-surface-variant/20 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="neurology">neurology</span>
+<span class="text-label-mono font-label-mono text-[10px] mt-1">AI Assistant</span>
+</a>
+</nav>
+<script>
+        // Simple haptic-like interaction simulation
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('click', () => {
+                if (window.navigator.vibrate) {
+                    window.navigator.vibrate(10);
+                }
+            });
+        });
+
+        // Atmospheric shimmer effect on balance card
+        const card = document.querySelector('.glass-card');
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    </script>
+</body></html>
