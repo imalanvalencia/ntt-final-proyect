@@ -1,4 +1,24 @@
+<<<<<<< HEAD
 # 🏦 Banco Online Fullstack - Guía del Proyecto
+=======
+
+#Role 
+
+
+## Backend 
+    -Carles Mora Javaloyes
+    -Adrián Pastor Alavés
+
+
+## FrontEnd 
+    - Alan Smith Valencia Izquierdo
+    - Alejandro Izquierdo Baeza
+
+
+
+
+# 🏦 Banco Online - API REST Backend (Spring Boot)
+>>>>>>> 50da52878efc6d7de951ef1d6ab07f15b646f5cd
 
 Este repositorio contiene la simulación completa de una plataforma de **Banco Online** integrada. Se compone de un front-end desarrollado en **Angular** (interfaz de cajero inteligente/dashboard) y un back-end en **Spring Boot** (servicios de persistencia y API REST con base de datos H2 en memoria).
 
@@ -81,6 +101,7 @@ Si prefieres ejecutar cada servicio de forma individual en terminales separadas,
    npm start
    ```
 4. Abre tu navegador en `http://localhost:4200`.
+
 
 ---
 
