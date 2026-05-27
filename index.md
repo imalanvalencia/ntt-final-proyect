@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Coordinar el trabajo entre `agente-front` que se encuentra en `./agent/front/agente-front.md` y `agente-back` que se encuentra en `./agent/back/agente-back.md` para que los cambios del proyecto `pruebas` se hagan con responsabilidades claras, sin duplicar trabajo y manteniendo una misma definicion funcional y además si los agentes necesitan más cosas, por ejemplo en el agentefront utilizar las skills  que la ruta es `./agent/front/skill/skill.md`, igual que para el agenteBack  `./agent/back/skill/skill.md`
+Coordinar el trabajo entre `agente-front` que se encuentra en `./agent/front/agente-front.md` y `agente-back` que se encuentra en `./agent/back/agente-back.md` para que los cambios del proyecto `ntt-final-proyect` se hagan con responsabilidades claras, sin duplicar trabajo y manteniendo una misma definicion funcional y además si los agentes necesitan más cosas, por ejemplo en el agentefront utilizar las skills  que la ruta es `./agent/front/skill/skill.md`, igual que para el agenteBack  `./agent/back/skill/skill.md`
 
 
 ## Observaciones 
