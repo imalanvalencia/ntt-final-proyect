@@ -1,0 +1,75 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam theme plain
+
+package com.alan.cajero.dto {
+    class MovimientoRequestDTO {
+        + numeroCuenta: String
+        + monto: BigDecimal
+        + tipo: String
+        + concepto: String
+    }
+    class TransaccionResponseDTO {
+        + id: Long
+        + tipo: String
+        + concepto: String
+        + monto: BigDecimal
+        + fecha: LocalDateTime
+        + categoria: String
+        + estadoFraude: String
+    }
+    class CuentaResponseDTO {
+        + numeroCuenta: String
+        + titular: String
+        + saldoActual: BigDecimal
+    }
+}
+
+package com.alan.cajero.controller {
+    class CajeroController {
+        - cajeroService: CajeroService
+        + procesarTransaccion(request: MovimientoRequestDTO): ResponseEntity<TransaccionResponseDTO>
+        + consultarSaldo(numeroCuenta: String): ResponseEntity<CuentaResponseDTO>
+    }
+}
+
+package com.alan.cajero.service {
+    interface CajeroService {
+        + procesarTransaccion(request: MovimientoRequestDTO): TransaccionResponseDTO
+        + consultarSaldo(numeroCuenta: String): CuentaResponseDTO
+    }
+
+    class CajeroServiceImpl {
+        - cuentaRepository: CuentaRepository
+        - transaccionRepository: TransaccionRepository
+        - aiService: AIService
+    }
+
+    interface AIService {
+        + evaluarFraude(t: Transaccion, balance: double): String
+        + clasificarGasto(concepto: String): String
+    }
+
+    class SpringAIServiceImpl {
+        - chatModel: ChatModel
+    }
+}
+
+package com.alan.cajero.repository {
+    interface CuentaRepository << JpaRepository >>
+    interface TransaccionRepository << JpaRepository >>
+}
+
+' Relaciones de dependencia y flujo de datos
+CajeroController --> MovimientoRequestDTO : recibe
+CajeroController --> TransaccionResponseDTO : devuelve
+CajeroController o-- CajeroService : usa
+
+CajeroServiceImpl ..|> CajeroService : implementa
+CajeroServiceImpl o-- CuentaRepository : usa
+CajeroServiceImpl o-- TransaccionRepository : usa
+CajeroServiceImpl o-- AIService : usa
+
+SpringAIServiceImpl ..|> AIService : implementa
+
+@enduml

@@ -1,0 +1,35 @@
+@startuml
+skinparam handwritten false
+skinparam monochrome false
+skinparam packageStyle rect
+skinparam shadowing true
+skinparam class {
+    BackgroundColor White
+    ArrowColor #1E3A8A
+    BorderColor #0B192C
+}
+
+package com.alan.cajero.model {
+    class Cuenta {
+        - id: Long
+        - numeroCuenta: String
+        - titular: String
+        - saldoActual: BigDecimal
+        - transacciones: List<Transaccion>
+    }
+
+    class Transaccion {
+        - id: Long
+        - tipo: String
+        - concepto: String
+        - monto: BigDecimal
+        - fecha: LocalDateTime
+        - estadoFraude: String
+        - categoria: String
+        - cuenta: Cuenta
+    }
+}
+
+' Relación 1 a Muchos Bidireccional
+Cuenta "1" *-- "0..*" Transaccion : contiene >
+@enduml
