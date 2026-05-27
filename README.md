@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+# 🏦 Banco Online Fullstack - Guía del Proyecto
+=======
 
 #Role 
 
@@ -15,259 +18,143 @@
 
 
 # 🏦 Banco Online - API REST Backend (Spring Boot)
+>>>>>>> 50da52878efc6d7de951ef1d6ab07f15b646f5cd
 
-Esta es la documentación del contrato y especificación de la API REST del backend de nuestra simulación de banco online. La aplicación se ejecuta por defecto en `http://localhost:8080` y utiliza una base de datos en memoria **H2** (consola accesible en `/h2-console` con usuario `sa` y sin contraseña).
+Este repositorio contiene la simulación completa de una plataforma de **Banco Online** integrada. Se compone de un front-end desarrollado en **Angular** (interfaz de cajero inteligente/dashboard) y un back-end en **Spring Boot** (servicios de persistencia y API REST con base de datos H2 en memoria).
 
 ---
 
-## 🚀 Endpoints de la API
+## 📂 Estructura del Repositorio
 
-### 1. Gestión de Clientes (`/api/clientes`)
+*   **`./frontend`**: Aplicación web desarrollada con **Angular 21**. Implementa componentes reactivos Standalone, gestión de estado mediante *Angular Signals*, e interactúa con el backend mediante Observables y servicios.
+*   **`./backend`**: Servicio REST en **Spring Boot** que expone la lógica de negocio, validaciones y acceso a datos usando *Spring Data JPA* y *H2 Database*.
+*   **`./documentacion`**: Diagramas y PDF de especificaciones de diseño.
+*   **`ddl.sql`**: Definición de la estructura de la base de datos (DDL).
 
-#### **Listar todos los clientes**
-*   **Método:** `GET`
-*   **Ruta:** `/api/clientes`
-*   **Respuesta (200 OK):**
-    ```json
-    [
-      {
-        "id": 1,
-        "username": "alan.smith",
-        "dni": "12345678A",
-        "email": "alan.smith@example.com",
-        "nombre": "Alan",
-        "apellidos": "Smith",
-        "telefono": "600112233",
-        "fechaRegistro": "2026-05-27T12:00:00"
-      }
-    ]
-    ```
+---
 
-#### **Ver detalle de un cliente**
-*   **Método:** `GET`
-*   **Ruta:** `/api/clientes/{id}`
-*   **Respuesta (200 OK):**
-    ```json
-    {
-      "id": 1,
-      "username": "alan.smith",
-      "dni": "12345678A",
-      "email": "alan.smith@example.com",
-      "nombre": "Alan",
-      "apellidos": "Smith",
-      "telefono": "600112233",
-      "fechaRegistro": "2026-05-27T12:00:00"
-    }
-    ```
-*   **Respuesta (400 Bad Request) - Cliente no encontrado:**
-    ```json
-    {
-      "timestamp": "2026-05-27T12:05:00",
-      "status": 400,
-      "error": "Bad Request",
-      "message": "Cliente no encontrado con id: 999"
-    }
-    ```
+## 🛠️ Requisitos Previos
 
-#### **Registrar nuevo cliente**
-*   **Método:** `POST`
-*   **Ruta:** `/api/clientes`
-*   **Cuerpo de la Petición (Request Body):**
-    ```json
-    {
-      "username": "jose.perez",
-      "password": "mi_password_segura",
-      "dni": "45678901Z",
-      "email": "jose.perez@example.com",
-      "nombre": "José",
-      "apellidos": "Pérez",
-      "telefono": "655443322"
-    }
-    ```
-*   **Respuesta (201 Created):**
-    ```json
-    {
-      "id": 4,
-      "username": "jose.perez",
-      "dni": "45678901Z",
-      "email": "jose.perez@example.com",
-      "nombre": "José",
-      "apellidos": "Pérez",
-      "telefono": "655443322",
-      "fechaRegistro": "2026-05-27T12:10:00"
-    }
-    ```
-*   **Respuesta (400 Bad Request) - DNI/Email/Username Duplicado:**
-    ```json
-    {
-      "timestamp": "2026-05-27T12:12:00",
-      "status": 400,
-      "error": "Bad Request",
-      "message": "Ya existe un cliente registrado con el DNI: 45678901Z"
-    }
-    ```
-
-#### **Listar las cuentas de un cliente**
-*   **Método:** `GET`
-*   **Ruta:** `/api/clientes/{id}/cuentas`
-*   **Respuesta (200 OK):**
-    ```json
-    [
-      {
-        "id": 1,
-        "numeroCuenta": "ES123456789012345678",
-        "clienteId": 1,
-        "clienteNombre": "Alan Smith",
-        "saldo": 1500.50
-      }
-    ]
+1.  **Node.js** (v20 o superior recomendado).
+2.  **Java JDK 17 o superior** (Se ha probado con Java 24).
+3.  **Configurar `JAVA_HOME`**: Asegúrate de tener configurada la variable de entorno `JAVA_HOME` apuntando a tu instalación de JDK. En Windows, normalmente se ubica en:
+    ```powershell
+    # Temporal en PowerShell:
+    $env:JAVA_HOME = "C:\Program Files\Java\jdk-24"
     ```
 
 ---
 
-### 2. Gestión de Cuentas (`/api/cuentas`)
+## 🚀 Arranque Rápido (Recomendado)
 
-#### **Listar todas las cuentas**
-*   **Método:** `GET`
-*   **Ruta:** `/api/cuentas`
-*   **Respuesta (200 OK):**
-    ```json
-    [
-      {
-        "id": 1,
-        "numeroCuenta": "ES123456789012345678",
-        "clienteId": 1,
-        "clienteNombre": "Alan Smith",
-        "saldo": 1500.50
-      }
-    ]
-    ```
+Hemos configurado un orquestador en la raíz del proyecto para que puedas levantar tanto el frontend como el backend de forma simultánea con un único comando utilizando `concurrently`.
 
-#### **Crear nueva cuenta para un cliente**
-*   **Método:** `POST`
-*   **Ruta:** `/api/cuentas`
-*   **Cuerpo de la Petición:**
-    ```json
-    {
-      "clienteId": 1
-    }
+1.  **Instalar dependencias globales y de proyectos:**
+    Desde la raíz del repositorio, ejecuta:
+    ```bash
+    npm install
     ```
-*   **Respuesta (201 Created):**
-    *   *Nota: El sistema genera automáticamente el número de cuenta único con formato español (prefijo ES seguido de 18 dígitos aleatorios) y saldo inicial 0.00.*
-    ```json
-    {
-      "id": 5,
-      "numeroCuenta": "ES839104726481029384",
-      "clienteId": 1,
-      "clienteNombre": "Alan Smith",
-      "saldo": 0.00
-    }
-    ```
+    *(Este comando instalará la herramienta de concurrencia en la raíz e instalará automáticamente los módulos de Node del frontend).*
 
-#### **Ver detalle de una cuenta (Saldo)**
-*   **Método:** `GET`
-*   **Ruta:** `/api/cuentas/{id}`
-*   **Respuesta (200 OK):**
-    ```json
-    {
-      "id": 1,
-      "numeroCuenta": "ES123456789012345678",
-      "clienteId": 1,
-      "clienteNombre": "Alan Smith",
-      "saldo": 1500.50
-    }
+2.  **Arrancar ambos servidores en desarrollo:**
+    Desde la raíz del repositorio, ejecuta:
+    ```bash
+    npm run dev
     ```
+    Este comando lanzará en paralelo:
+    *   El **Backend (Spring Boot)** en `http://localhost:8080` (utilizando el Maven Wrapper local).
+    *   El **Frontend (Angular)** en `http://localhost:4200` (utilizando el Angular CLI).
 
 ---
 
-### 3. Operaciones Básicas y Movimientos (`/api/cuentas/{id}/transacciones`)
+## 💻 Ejecución Manual por Carpetas
 
-#### **Registrar un ingreso o retiro (Movimiento)**
-*   **Método:** `POST`
-*   **Ruta:** `/api/cuentas/{id}/transacciones`
-*   **Cuerpo de la Petición:**
-    *   *Nota: `tipo` debe ser "INGRESO" o "RETIRO". El `monto` siempre debe ser un número positivo.*
-    ```json
-    {
-      "tipo": "RETIRO",
-      "monto": 100.00,
-      "concepto": "Retiro en Cajero Automático",
-      "categoria": "Efectivo"
-    }
-    ```
-*   **Respuesta (210 Created) - Transacción Registrada:**
-    *   *Nota: En la respuesta y base de datos, la cantidad del RETIRO figurará con signo negativo (-100.00) y la del INGRESO con signo positivo (+100.00) respetando los constraints del esquema SQL.*
-    ```json
-    {
-      "id": 6,
-      "tipo": "RETIRO",
-      "concepto": "Retiro en Cajero Automático",
-      "cantidad": -100.00,
-      "fecha": "2026-05-27T12:20:00",
-      "categoria": "Efectivo",
-      "cuentaId": 1
-    }
-    ```
-*   **Respuesta (400 Bad Request) - Saldo Insuficiente:**
-    ```json
-    {
-      "timestamp": "2026-05-27T12:21:00",
-      "status": 400,
-      "error": "Bad Request",
-      "message": "Saldo insuficiente en la cuenta. Saldo actual: 50.00"
-    }
-    ```
+Si prefieres ejecutar cada servicio de forma individual en terminales separadas, sigue estas instrucciones:
 
-#### **Listar movimientos de una cuenta**
-*   **Método:** `GET`
-*   **Ruta:** `/api/cuentas/{id}/transacciones`
-*   **Respuesta (200 OK - Ordenados por fecha de más reciente a más antiguo):**
-    ```json
-    [
-      {
-        "id": 3,
-        "tipo": "RETIRO",
-        "concepto": "Pago internet",
-        "cantidad": -49.50,
-        "fecha": "2026-05-26T15:30:00",
-        "categoria": "Servicios",
-        "cuentaId": 1
-      },
-      {
-        "id": 2,
-        "tipo": "RETIRO",
-        "concepto": "Compra supermercado",
-        "cantidad": -50.00,
-        "fecha": "2026-05-24T18:00:00",
-        "categoria": "Alimentación",
-        "cuentaId": 1
-      },
-      {
-        "id": 1,
-        "tipo": "INGRESO",
-        "concepto": "Nómina mensual",
-        "cantidad": 2000.00,
-        "fecha": "2026-05-22T09:00:00",
-        "categoria": "Nómina",
-        "cuentaId": 1
-      }
-    ]
-    ```
-
----
-
-## 🛠️ Instrucciones de Ejecución local del Backend
-
-Para compilar y arrancar este backend de forma local, utiliza los siguientes comandos Maven estándar en la carpeta `./backend`:
-
-1. **Compilar y pasar los tests:**
+### 1. Iniciar el Backend (Spring Boot)
+1. Ve al directorio del backend:
    ```bash
-   mvn clean test
+   cd backend
    ```
+2. Ejecuta el servidor usando el Maven Wrapper incluido:
+   *   **Windows (PowerShell):**
+       ```powershell
+       .\mvnw.cmd spring-boot:run
+       ```
+   *   **Linux/macOS:**
+       ```bash
+       ./mvnw spring-boot:run
+       ```
+3. El backend estará disponible en `http://localhost:8080`.
 
-2. **Arrancar el servidor de desarrollo:**
+### 2. Iniciar el Frontend (Angular)
+1. Ve al directorio del frontend:
    ```bash
-   mvn spring-boot:run
+   cd frontend
    ```
+2. Instala las dependencias (si no lo has hecho antes):
+   ```bash
+   npm install
+   ```
+3. Arranca el servidor de desarrollo de Angular:
+   ```bash
+   npm start
+   ```
+4. Abre tu navegador en `http://localhost:4200`.
 
-El backend se levantará en el puerto **`8080`** y habilitará el CORS para que el `agente-front` pueda consumirlo directamente desde su aplicación Angular local.
+
+---
+
+## 🗄️ Base de Datos en Memoria (H2)
+
+El backend utiliza una base de datos **H2 en memoria** que se reinicializa y se pobla con datos de prueba automáticamente en cada arranque utilizando los scripts `./backend/src/main/resources/schema.sql` y `data.sql`.
+
+*   **Consola de Administración H2:** `http://localhost:8080/h2-console`
+*   **JDBC URL:** `jdbc:h2:mem:bancodb`
+*   **Usuario:** `sa`
+*   **Contraseña:** *(Vacío, sin contraseña)*
+
+### Datos de Prueba Pre-cargados
+*   **Usuario Principal (ATM):**
+    *   **ID:** `1`
+    *   **Nombre:** Alan Smith
+    *   **Username:** `alan.smith`
+    *   **DNI:** `12345678A`
+    *   **Password:** `password123`
+*   **Cuentas asociadas a Alan:**
+    *   `ES123456789012345678` (Saldo: 1500.50 €)
+    *   `ES987654321098765432` (Saldo: 50.00 €)
+
+---
+
+## 📡 Endpoints de la API REST
+
+### 1. Clientes (`/api/clientes`)
+| Método | Ruta | Descripción |
+| :--- | :--- | :--- |
+| **GET** | `/api/clientes` | Obtiene una lista de todos los clientes. |
+| **GET** | `/api/clientes/{id}` | Obtiene la información detallada de un cliente. |
+| **POST** | `/api/clientes` | Registra un nuevo cliente (recibe un DTO de cliente). |
+| **GET** | `/api/clientes/{id}/cuentas` | Obtiene todas las cuentas bancarias asociadas a un cliente. |
+
+### 2. Cuentas (`/api/cuentas`)
+| Método | Ruta | Descripción |
+| :--- | :--- | :--- |
+| **GET** | `/api/cuentas` | Obtiene la lista completa de todas las cuentas registradas. |
+| **GET** | `/api/cuentas/{id}` | Obtiene los detalles de una cuenta (incluido el saldo). |
+| **POST** | `/api/cuentas` | Crea una nueva cuenta bancaria para un cliente (saldo inicial: `0.00`). |
+
+### 3. Transacciones y Movimientos (`/api/cuentas/{id}/transacciones`)
+| Método | Ruta | Descripción |
+| :--- | :--- | :--- |
+| **GET** | `/api/cuentas/{id}/transacciones` | Lista los movimientos de una cuenta (ordenados de más recientes a antiguos). |
+| **POST** | `/api/cuentas/{id}/transacciones` | Registra una transacción (`INGRESO` o `RETIRO`) en la cuenta especificada. |
+
+---
+
+## 🧠 Flujo de la Aplicación (Smart ATM)
+
+1.  **Acceso Seguro (PIN):** El frontend presenta una pantalla de inicio simulando un cajero automático. Cualquier PIN de 4 dígitos cargará automáticamente al usuario por defecto `alan.smith` (ID 1) y sus cuentas desde el backend.
+2.  **Dashboard:** Muestra las cuentas del usuario y su saldo en tiempo real. Puedes alternar entre cuentas para visualizar su historial de movimientos.
+3.  **Depósito y Retiro:** Permite usar un teclado numérico digital para ingresar o retirar efectivo de la cuenta seleccionada. El saldo se actualiza de inmediato mediante llamadas al backend, validando que no haya saldo negativo.
+4.  **Asistente IA Integrado:** Un chat interactivo simulado en la barra lateral que responde a tus preguntas financieras y de seguridad.
