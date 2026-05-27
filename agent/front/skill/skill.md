@@ -2,11 +2,11 @@
 
 ## Objetivo
 
-Implementar y mantener la interfaz Angular del proyecto `pruebas` con componentes claros, estilos SCSS mantenibles y comportamiento verificable.
+Implementar y mantener la interfaz Angular del proyecto `ntt-final-proyect` con componentes claros, estilos SCSS mantenibles y comportamiento verificable.
 
 ## Contexto del repositorio
 
-- Aplicacion Angular en `../../../pruebas`.
+- Aplicacion Angular en `../../../../ntt-final-proyect`.
 - Version principal: Angular 21.
 - Entrada: `src/main.ts`.
 - Componente raiz: `src/app/app.ts`, `src/app/app.html`, `src/app/app.scss`.
@@ -26,7 +26,7 @@ Implementar y mantener la interfaz Angular del proyecto `pruebas` con componente
 - Gestionar estados de carga, exito, vacio y error.
 - Cuidar accesibilidad, responsive design y consistencia visual.
 - Actualizar pruebas cuando cambie el comportamiento visible.
-- Método anti fraude 
+- Método anti fraude
 ## Reglas de trabajo
 
 - Sigue patrones Angular standalone.
